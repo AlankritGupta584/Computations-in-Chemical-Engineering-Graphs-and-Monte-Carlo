@@ -1,0 +1,31 @@
+class Solution {
+public:
+
+    void customHelper(TreeNode* node, TreeNode* &tail){
+        if(node->left == NULL && node->right == NULL){
+            tail = node;
+            return;
+        }
+        if(node->left){
+            customHelper(node->left, tail);
+        }
+        TreeNode* temp = node->right;
+        if(tail != NULL){
+            node->right = node->left;
+            tail->right = temp; 
+        }
+        node->left = NULL;
+        if(temp){
+            tail = NULL;
+            customHelper(temp, tail);
+        }
+    }
+
+    void customFlatten(TreeNode* root) {
+        if(root == NULL || (root->left == NULL && root->right == NULL)){
+            return;
+        }
+        TreeNode* tail = NULL;
+        customHelper(root, tail);
+    }
+};
