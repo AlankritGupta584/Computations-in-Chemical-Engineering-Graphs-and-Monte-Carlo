@@ -1,0 +1,36 @@
+void Traverse(TreeNode* root, map<int, multiset<pair<int, int>>>& m, int left, int right) {
+    if (root == nullptr) {
+        return;
+    }
+    
+    // Calculate the column index based on the difference between right and left
+    int column = right - left;
+    
+    // Insert the node into the multiset associated with its column
+    m[column].insert({left + right, root->val});
+    
+    // Recursively traverse left and right children, adjusting positions
+    Traverse(root->left, m, left + 1, right);
+    Traverse(root->right, m, left, right + 1);
+}
+
+vector<vector<int>> verticalTraversal(TreeNode* root) {
+    map<int, multiset<pair<int, int>>> m; // Maps column index to nodes sorted by row and value
+    
+    // Start traversal with initial left and right positions
+    int left = 0, right = 0;
+    Traverse(root, m, left, right);
+    
+    // Prepare result in the required format
+    vector<vector<int>> ans;
+    
+    for (auto& [column, nodes] : m) {
+        vector<int> temp;
+        for (auto& [rowValueSum, nodeValue] : nodes) {
+            temp.push_back(nodeValue);
+        }
+        ans.push_back(temp);
+    }
+    
+    return ans;
+}
